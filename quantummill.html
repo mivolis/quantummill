@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantumMill — Quantum algorithms. Scientific impact.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e17;--bg2:#0f1420;--bg3:#151b2b;
+  --card:#131926;--card-hover:#1a2236;--card-border:#1e2a40;
+  --text:#e2e8f0;--text-dim:#8896b0;--text-muted:#5a6a84;
+  --accent:#a3e635;--accent2:#65e0a3;
+  --blue:#3b82f6;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.25rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:rgba(10,14,23,.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(30,42,64,.4)}
+.logo{display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:1.1rem;letter-spacing:-.02em}
+.logo svg{width:28px;height:28px}
+.logo span:last-child{color:var(--text-dim);font-weight:400}
+nav ul{display:flex;gap:2.5rem;list-style:none;font-size:.875rem;color:var(--text-dim)}
+nav ul a:hover{color:var(--text)}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 2.5rem 4rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg canvas{width:100%;height:100%}
+.hero-content{position:relative;z-index:1;max-width:720px}
+.hero-label{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2rem}
+.hero-label::before{content:'';width:24px;height:1px;background:var(--accent)}
+.hero h1{font-family:var(--serif);font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:500;line-height:1.1;margin-bottom:1.5rem}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:1.1rem;color:var(--text-dim);max-width:480px;margin-bottom:2.5rem;line-height:1.7}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.85rem 1.5rem;border-radius:6px;font-size:.9rem;font-weight:500;transition:all .25s}
+.btn-primary{background:var(--accent);color:#0a0e17}
+.btn-primary:hover{background:#b8ef50;transform:translateY(-1px)}
+.btn-primary svg{width:16px;height:16px}
+
+/* SCROLL BAR */
+.scroll-bar{position:relative;z-index:1;margin-top:4rem;padding:1.5rem 0;border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.scroll-tags{display:flex;gap:1rem}
+.scroll-tags span{padding:.5rem 1rem;border:1px solid var(--card-border);border-radius:999px;font-size:.75rem;letter-spacing:.05em;text-transform:none;color:var(--text-dim)}
+
+/* SECTIONS */
+section{padding:6rem 2.5rem}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2rem}
+.section-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:500;line-height:1.15;margin-bottom:1.5rem}
+.section-title em{font-style:italic}
+
+/* OPPORTUNITY */
+.opportunity{background:var(--bg)}
+.opp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;margin-top:3.5rem}
+.opp-item .icon{width:40px;height:40px;border-radius:10px;background:var(--bg3);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;color:var(--accent)}
+.opp-item h3{font-size:1rem;font-weight:600;margin-bottom:.6rem}
+.opp-item p{font-size:.9rem;color:var(--text-dim);line-height:1.6}
+
+/* CORE TECH */
+.core-tech{background:var(--bg2)}
+.tech-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem}
+.tech-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:2rem;transition:all .3s;position:relative;overflow:hidden}
+.tech-card:hover{border-color:rgba(163,230,53,.2);transform:translateY(-2px)}
+.tech-card.highlight{border-color:rgba(163,230,53,.35);background:linear-gradient(135deg,rgba(163,230,53,.06),transparent)}
+.tech-tag{display:inline-block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .7rem;border-radius:4px;margin-bottom:1.5rem;background:var(--bg3);color:var(--text-dim)}
+.tech-card.highlight .tech-tag{background:rgba(163,230,53,.15);color:var(--accent)}
+.tech-card h3{font-size:1.35rem;font-weight:600;line-height:1.3;margin-bottom:1rem}
+.tech-card p{font-size:.88rem;color:var(--text-dim);line-height:1.65;margin-bottom:2rem}
+.tech-flow{display:flex;align-items:center;gap:.75rem;font-size:.85rem;margin-bottom:.75rem}
+.tech-flow .pill{padding:.4rem .85rem;border-radius:6px;background:var(--bg3);font-size:.8rem;color:var(--text-dim)}
+.tech-card.highlight .tech-flow .pill:last-child{background:rgba(163,230,53,.15);color:var(--accent)}
+.tech-flow svg{color:var(--text-muted);flex-shrink:0}
+.tech-meta{display:flex;align-items:center;justify-content:space-between;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--card-border);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+.tech-meta a{display:inline-flex;align-items:center;gap:.35rem;color:var(--text-dim);font-weight:500;transition:color .2s}
+.tech-meta a:hover{color:var(--accent)}
+
+/* SCIENCE */
+.science{background:var(--bg)}
+.science .section-desc{font-size:1rem;color:var(--text-dim);max-width:540px;margin-bottom:3rem;line-height:1.65}
+.pub{display:flex;align-items:flex-start;justify-content:space-between;padding:1.75rem 0;border-top:1px solid var(--card-border)}
+.pub:last-of-type{border-bottom:1px solid var(--card-border)}
+.pub-left{display:flex;gap:3rem;align-items:flex-start}
+.pub-source{min-width:100px}
+.pub-source h4{font-size:1.1rem;font-weight:700;letter-spacing:-.01em}
+.pub-source span{font-size:.75rem;color:var(--text-muted)}
+.pub-info h5{font-size:.95rem;font-weight:500;margin-bottom:.25rem}
+.pub-info p{font-size:.85rem;color:var(--text-dim)}
+.pub-link{color:var(--text-dim);transition:color .2s;flex-shrink:0;padding:.5rem}
+.pub-link:hover{color:var(--accent)}
+.disclaimer{margin-top:2rem;font-size:.78rem;color:var(--text-muted);line-height:1.6;max-width:800px}
+
+/* PEOPLE */
+.people{background:var(--bg2)}
+.people .section-desc{font-size:1rem;color:var(--text-dim);max-width:540px;margin-bottom:3rem;line-height:1.65}
+.people-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.person-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:2rem;transition:all .3s}
+.person-card:hover{border-color:rgba(163,230,53,.15)}
+.person-top{display:flex;gap:1.25rem;align-items:center;margin-bottom:1.25rem}
+.person-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--bg3),var(--card-border));display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--accent);flex-shrink:0}
+.person-header h3{font-size:1.1rem;font-weight:600}
+.person-header .role{font-size:.8rem;color:var(--accent2)}
+.person-header .org{font-size:.8rem;color:var(--text-muted)}
+.person-card>p{font-size:.88rem;color:var(--text-dim);line-height:1.6;margin-bottom:1.5rem}
+.person-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.25rem}
+.person-tags span{font-size:.72rem;padding:.3rem .65rem;border-radius:4px;background:var(--bg3);color:var(--text-dim)}
+.person-links{display:flex;gap:1rem}
+.person-links a{display:inline-flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--text-dim);transition:color .2s}
+.person-links a:hover{color:var(--accent)}
+
+/* FOOTER */
+footer{padding:2.5rem;border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--text-muted)}
+footer .footer-logo{display:flex;align-items:center;gap:.5rem;font-weight:600;color:var(--text)}
+footer .footer-logo svg{width:20px;height:20px}
+
+/* HERO CANVAS ANIMATION */
+.hero-glow{position:absolute;top:5%;right:-5%;width:60%;height:80%;background:radial-gradient(ellipse,rgba(59,130,246,.12) 0%,rgba(101,224,163,.06) 40%,transparent 70%);filter:blur(60px);z-index:0;animation:glow 8s ease-in-out infinite alternate}
+@keyframes glow{0%{opacity:.6;transform:translate(0,0) scale(1)}100%{opacity:1;transform:translate(-2%,3%) scale(1.05)}}
+.hero-lines{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-lines svg{position:absolute;top:0;right:0;width:65%;height:100%;opacity:.2}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  nav ul{gap:1.5rem;font-size:.8rem}
+  .hero{padding:7rem 1.5rem 3rem}
+  section{padding:4rem 1.5rem}
+  .opp-grid,.tech-cards,.people-grid{grid-template-columns:1fr}
+  .pub-left{flex-direction:column;gap:.75rem}
+  .scroll-bar{flex-direction:column;gap:1rem;align-items:flex-start}
+  .scroll-tags{flex-wrap:wrap}
+  footer{flex-direction:column;gap:1rem;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="4" fill="var(--accent)" opacity=".8"/><path d="M14 2v24M2 14h24" stroke="currentColor" stroke-width=".5" opacity=".3"/><ellipse cx="14" cy="14" rx="8" ry="12" transform="rotate(30 14 14)" stroke="currentColor" stroke-width=".7" opacity=".4"/><ellipse cx="14" cy="14" rx="8" ry="12" transform="rotate(-30 14 14)" stroke="currentColor" stroke-width=".7" opacity=".4"/></svg>
+    <span>Quantum</span><span>Mill</span>
+  </a>
+  <ul>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#science">Science</a></li>
+    <li><a href="#people">People</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-lines">
+    <svg viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 0C150 200 400 300 300 500S500 700 450 800" stroke="url(#g1)" stroke-width=".8"/>
+      <path d="M200 0C250 150 100 350 300 450S200 650 350 800" stroke="url(#g2)" stroke-width=".6"/>
+      <path d="M400 0C350 200 500 300 350 500S450 700 400 800" stroke="url(#g1)" stroke-width=".5"/>
+      <path d="M50 100C200 200 350 150 400 350S250 550 350 750" stroke="url(#g2)" stroke-width=".4"/>
+      <path d="M500 50C400 200 300 250 350 400S500 550 450 700" stroke="url(#g1)" stroke-width=".6"/>
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#3b82f6" stop-opacity=".6"/><stop offset="1" stop-color="#65e0a3" stop-opacity=".2"/></linearGradient>
+        <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#65e0a3" stop-opacity=".4"/><stop offset="1" stop-color="#3b82f6" stop-opacity=".1"/></linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <div class="hero-label">Quantum Computing &times; Statistical Science</div>
+    <h1>Quantum algorithms.<br><em>Scientific impact.</em></h1>
+    <p>Complex data. Vast possibilities.<br>We're building a quantum approach to finding what matters&mdash;and understanding how certain it is.</p>
+    <a href="#technology" class="btn btn-primary">Explore our approach <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+  </div>
+  <div class="scroll-bar">
+    <span>From possibility to precision</span>
+    <span style="letter-spacing:.08em">QuantumMill</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--text-muted);margin-top:1rem">
+    <span>Research at the intersection of</span>
+    <div class="scroll-tags">
+      <span>Quantum algorithms</span>
+      <span>Statistical inference</span>
+      <span>Scientific discovery</span>
+    </div>
+  </div>
+</section>
+
+<!-- 01 OPPORTUNITY -->
+<section class="opportunity" id="opportunity">
+  <div class="section-inner">
+    <div class="section-label">01 / The Opportunity</div>
+    <div class="section-title"><em>More possibilities.</em><br>A smarter way through.</div>
+    <p style="font-size:1rem;color:var(--text-dim);max-width:580px;line-height:1.65">Modern science faces a computational bottleneck: too many models to search, too many resamples to evaluate. QuantumMill focuses on the algorithms that can change that equation.</p>
+    <div class="opp-grid">
+      <div class="opp-item">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="3"/><path d="M10 3v2M10 15v2M3 10h2M15 10h2"/></svg></div>
+        <h3>Find the signal.</h3>
+        <p>Search large combinations of variables to identify compact, informative models.</p>
+      </div>
+      <div class="opp-item">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16V8M10 16V4M16 16v-6"/></svg></div>
+        <h3>Make precision count.</h3>
+        <p>Rethink repeated sampling to target a better trade-off between accuracy and computation.</p>
+      </div>
+      <div class="opp-item">
+        <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3l6 4v6l-6 4-6-4V7z"/><path d="M10 3v14M4 7l6 3 6-3"/></svg></div>
+        <h3>Keep the rigor.</h3>
+        <p>Bring statistical error analysis into quantum algorithm design, from the start.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 CORE TECHNOLOGY -->
+<section class="core-tech" id="technology">
+  <div class="section-inner">
+    <div class="section-label">02 / Core Technology</div>
+    <div class="section-title"><em>Two engines.</em><br>One scientific ambition.</div>
+    <div class="tech-cards">
+      <div class="tech-card">
+        <div class="tech-tag">Smarter Search</div>
+        <h3>The right model.<br>From a world of options.</h3>
+        <p>Bisection Grover's Search combines quantum search with binary refinement to find high-performing variable subsets. Its application to single-cell data helps identify informative protein-marker panels.</p>
+        <div class="tech-flow">
+          <span class="pill">Candidate models</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          <span class="pill">Informative subset</span>
+        </div>
+        <div class="tech-meta">
+          <span>Model selection &middot; Single-cell data</span>
+          <a href="https://www.tandfonline.com/doi/full/10.1080/01621459.2024.2404259" target="_blank" rel="noopener">Research <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6v6M10 2L4 8"/></svg></a>
+        </div>
+      </div>
+      <div class="tech-card highlight">
+        <div class="tech-tag">Sharper Inference</div>
+        <h3>Understand uncertainty.<br>Rethink the repetition.</h3>
+        <p>Quantum Bootstrap represents possible resamples in quantum superposition and uses amplitude estimation to recover distributional information&mdash;opening a new route to computationally efficient inference.</p>
+        <div class="tech-flow">
+          <span class="pill">Quantum resampling</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          <span class="pill">Uncertainty estimates</span>
+        </div>
+        <div class="tech-meta">
+          <span>Bootstrap &middot; Statistical inference</span>
+          <a href="https://arxiv.org/abs/2411.15987" target="_blank" rel="noopener">Research <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6v6M10 2L4 8"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 SCIENCE -->
+<section class="science" id="science">
+  <div class="section-inner">
+    <div class="section-label">03 / Scientific Foundation</div>
+    <div class="section-title"><em>Ambition, backed</em><br>by evidence.</div>
+    <p class="section-desc">Two complementary research directions connect quantum computation to concrete problems in data science.</p>
+    <div class="pub">
+      <div class="pub-left">
+        <div class="pub-source">
+          <h4>JASA</h4>
+          <span>Peer-reviewed &middot; 2025</span>
+        </div>
+        <div class="pub-info">
+          <h5>Quantum search for biological discovery</h5>
+          <p>Bisection Grover's Search Algorithm and Its Application in Analyzing CITE-seq Data</p>
+        </div>
+      </div>
+      <a href="https://www.tandfonline.com/doi/full/10.1080/01621459.2024.2404259" target="_blank" rel="noopener" class="pub-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3h8v8M13 3L5 11"/></svg></a>
+    </div>
+    <div class="pub">
+      <div class="pub-left">
+        <div class="pub-source">
+          <h4>QBOOT</h4>
+          <span>arXiv preprint &middot; 2026</span>
+        </div>
+        <div class="pub-info">
+          <h5>A quantum approach to statistical confidence</h5>
+          <p>Quantum Statistical Bootstrap</p>
+        </div>
+      </div>
+      <a href="https://arxiv.org/abs/2411.15987" target="_blank" rel="noopener" class="pub-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3h8v8M13 3L5 11"/></svg></a>
+    </div>
+    <p class="disclaimer">The research establishes near-quadratic theoretical speedups under its stated computational assumptions. Demonstrations include small-scale quantum hardware and simulation for BGS, and simulation for QBOOT; these are not production performance benchmarks.</p>
+  </div>
+</section>
+
+<!-- 04 PEOPLE -->
+<section class="people" id="people">
+  <div class="section-inner">
+    <div class="section-label">04 / People &amp; Perspective</div>
+    <div class="section-title"><em>Scientific depth.</em><br>Entrepreneurial perspective.</div>
+    <p class="section-desc">Connecting rigorous research with the experience to move scientific ideas forward.</p>
+    <div class="people-grid">
+      <div class="person-card">
+        <div class="person-top">
+          <div class="person-avatar">PM</div>
+          <div class="person-header">
+            <h3>Ping Ma</h3>
+            <div class="role">Distinguished Research Professor</div>
+            <div class="org">University of Georgia</div>
+          </div>
+        </div>
+        <p>A statistician connecting large-scale data, computation, and scientific discovery. Ping Ma co-authored both foundational studies featured here and leads the Big Data Analytics lab at the University of Georgia.</p>
+        <div class="person-tags">
+          <span>Ph.D., Statistics &middot; Purdue</span>
+          <span>NSF CAREER Award</span>
+        </div>
+        <div class="person-links">
+          <a href="https://www.stat.uga.edu/directory/people/ping-ma" target="_blank" rel="noopener">Meet Ping Ma <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6v6M10 2L4 8"/></svg></a>
+        </div>
+      </div>
+      <div class="person-card">
+        <div class="person-top">
+          <div class="person-avatar">MM</div>
+          <div class="person-header">
+            <h3>Martin Moore</h3>
+            <div class="role">Biotech entrepreneur</div>
+            <div class="org">Co-founder, Meissa Vaccines</div>
+          </div>
+        </div>
+        <p>Martin "Marty" Moore co-founded Meissa Vaccines, translating academic virology research into vaccine development. A former Emory associate professor, his experience bridges scientific innovation, company building, and clinical development.</p>
+        <div class="person-tags">
+          <span>UGA alumnus &middot; B.S. &amp; Ph.D.</span>
+          <span>Science to venture</span>
+        </div>
+        <div class="person-links">
+          <a href="#" target="_blank" rel="noopener">Meet Marty <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6v6M10 2L4 8"/></svg></a>
+          <a href="#" target="_blank" rel="noopener">LinkedIn <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h6v6M10 2L4 8"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg viewBox="0 0 28 28" fill="none" width="20" height="20"><circle cx="14" cy="14" r="12" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="4" fill="var(--accent)" opacity=".8"/></svg>
+    Quantum<span style="color:var(--text-dim);font-weight:400">Mill</span>
+  </div>
+  <span>Quantum algorithms. Scientific impact.</span>
+  <span>&copy; 2026 QuantumMill</span>
+</footer>
+
+</body>
+</html>
